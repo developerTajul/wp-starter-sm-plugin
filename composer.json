@@ -1,0 +1,20 @@
+{
+  "name": "tajul/wedevs-academy",
+  "version": "1.0.0",
+  "description": "this is a dummy description",
+  "type": "wordpres-plugin",
+  "autoload": {
+    "psr-4": {
+      "WeDevs\\Academy\\": "includes/"
+    },
+    "files": []
+  },
+  "authors": [
+    {
+      "name": "developerTajul",
+      "email": "developer.tajul@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {}
+}
