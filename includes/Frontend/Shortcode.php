@@ -23,6 +23,6 @@ class Shortcode {
      * @return string
      */
     public function render_shortcode( $atts, $content = '' ) {
-        return 'Hello from Shortcode';
+        return 'Hello from Shortcode Tajul vai';
     }
 }

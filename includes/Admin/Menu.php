@@ -16,6 +16,6 @@ class Menu {
     }
 
     public function plugin_page() {
-        echo 'Hello World';
+        echo 'Hello World Tajul via';
     }
 }

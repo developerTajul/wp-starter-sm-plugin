@@ -1,68 +1,44 @@
-<?php 
+<?php
 /**
  * Plugin Name: WeDevs Academy
  * Plugin URI: https://wedevs.com/
- * Description: WeDevs Academy is a medium label WordPres Starter Plugin
+ * Description: WeDevs Academy is a medium label WordPress Starter Plugin
  * Version: 1.0.0
  * Author: Tajul Islam
  * Author URI: https://wedevs.com/
  * License: GPLv2 or later
  */
-if(! defined('ABSPATH' ) ){
+
+// ১. Strict Typing এনফোর্স করা
+declare(strict_types=1);
+
+if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// ২. Composer Autoloader লোড করা
 require_once __DIR__ . '/vendor/autoload.php';
 
-final class WeDevs_Academy{
+/**
+ * ৩. গ্লোবাল কনস্ট্যান্ট ডিফাইন করা 
+ * (কনস্ট্যান্টগুলো মেইন ফাইলে রাখাই বেস্ট প্র্যাকটিস, কারণ এগুলো পুরো অ্যাপ্লিকেশনে যেকোনো জায়গা থেকে লাগতে পারে)
+ */
+define( 'WD_ACADEMY_VERSION', '1.0.0' );
+define( 'WD_ACADEMY_FILE', __FILE__ );
+define( 'WD_ACADEMY_PATH', __DIR__ );
+define( 'WD_ACADEMY_URL', plugins_url( '', __FILE__ ) );
+define( 'WD_ACADEMY_ASSETS', WD_ACADEMY_URL . '/assets' );
 
-    static $version = '1.0.0';
+/**
+ * ৪. প্লাগিন অ্যাক্টিভেশন হুক
+ * দায়িত্ব দেওয়া হলো আমাদের নতুন তৈরি করা Activator ক্লাসের হাতে
+ */
+register_activation_hook( __FILE__, [ \WeDevs\Academy\Activator::class, 'activate' ] );
 
-    private function __construct(){
-        $this->define_constants();
-
-        register_activation_hook(__FILE__, array($this, 'activate'));
-
-        add_action('plugins_loaded', array($this, 'init_plugins'));
-    }
-
-    public static function init(){
-
-        static $instance = false;
-
-        if(! $instance){
-            $instance = new self();
-        }
-
-        return $instance;
-    }
-
-    public function init_plugins(){
-       if ( is_admin() ) {
-            new WeDevs\Academy\Admin();
-        } else {
-            new WeDevs\Academy\Frontend();
-        }
-    }
-
-    public function define_constants(){
-        define('WP_ACADEMY_VERSION', self::$version);
-        define('WP_ACADEMY_FILE', __FILE__);
-        define('WP_ACADEMY_PATH', __DIR__);
-        define('WP_ACADEMY_URL', plugins_url('', WP_ACADEMY_FILE));
-        define('WP_ACADEMY_ASSETS', WP_ACADEMY_URL . '/assets/');
-    }
-
-
-    public function activate(){
-        update_option('wedevs_academy_version', self::$version);
-        add_option('wedevs_academy_activation', time());
-    }
-}
-
-
-function wedevs_academy(){
-    return WeDevs_Academy::init();
-}
-
-wedevs_academy();
+/**
+ * ৫. সিস্টেম বুটস্ট্র্যাপিং (Kernel / Application চালু করা)
+ * plugins_loaded ইভেন্টে আমরা শুধু Application কে কল করে দিচ্ছি, বাকিটা সে বুঝবে!
+ */
+add_action( 'plugins_loaded', function() {
+    \WeDevs\Academy\Application::getInstance();
+});
